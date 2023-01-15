@@ -1,57 +1,13 @@
-#1. we run part 2 but only if swap perfectly puts both ppl home
-#2. next, run part 1
-#3. sort each subkingdom with part 2
-
-# CHANGE INPUT FILE HERE
-f = open("3c.in", "r")
-
+f = open("1a.in", "r")
 kingdoms = int(f.readline())
-homes = int(f.readline())
+cities = int(f.readline())
 inputArray = f.readline().split(" ")
 pairArray = []
-# print(kingdoms)
-# print(homes)
-# print(inputArray)
+print(kingdoms)
+print(cities)
+print(inputArray)
 f.close()
 
-for i in range(kingdoms * homes):
-    pairArray.append([inputArray[i], i])
-
-# print(pairArray)
-
-numArray = []
-
-
-#stores the cost of the total moves
-cost = 0
-
-# numArray = array with numbers representing each home
-for house in pairArray:
-  # print(ord(house[0][0])) 
-  numArray.append((ord(house[0][0])-97)*homes + int(house[0][1]))
-# print(numArray)
-
-f = open("3c.out", "a")
-
-#sorting algorithm
-def perfectSelectionSort(numArray, accArray, size, cost):
-    
-    for i in range(size):
-        min_index = i
-        for j in range(i + 1, size):
-            if numArray[j] < numArray[min_index]:
-                min_index = j
-         # swapping the elements to sort the array
-        if numArray[min_index] == i + 1: #if the things we swap result in perfect placement for both
-          (numArray[i], numArray[min_index]) = (numArray[min_index],numArray[i])
-          (accArray[i], accArray[min_index]) = (accArray[min_index],accArray[i])
-        # print(" swapped " + accArray[i][0] + " and " + accArray[min_index][0])
-          if accArray[i][0] != accArray[min_index][0]:
-            f.write("Swap " + accArray[i][0] + " and " + accArray[min_index][0] +"\n")
-            cost += 5
-            
-    retList = [cost, accArray]
-    return retList
 
 def part1wcost(kingdoms, homes, inputArray,  runningCost):
   returnArray = inputArray
@@ -59,10 +15,12 @@ def part1wcost(kingdoms, homes, inputArray,  runningCost):
   currentCost = runningCost;
   
   for i in range(kingdoms * homes):
-      currentNum = int((ord(inputArray[i][0][0]) - ord('a'))) + 1
+      currentNum = int((ord(inputArray[i][0]) - ord('a'))) + 1
      
       if not (i < (currentNum * homes) and i >= ((currentNum - 1) * homes)):
-          misplacedArray.append([inputArray[i][0], i]) 
+          misplacedArray.append([inputArray[i], i]) 
+  
+  f = open("1a.out", "a")
   
   booleanArray = [False] * len(misplacedArray) # array to keep track of misplaced homes that get swapped into their right kingdom
   
@@ -163,40 +121,3 @@ def part1wcost(kingdoms, homes, inputArray,  runningCost):
   #Package cost and new array for use later
   retList = [currentCost, returnArray]
   return retList
-
-def selectionSort(numArray, misplacedArray, size, cost):
-    
-    for i in range(size):
-        min_index = i
-        for j in range(i + 1, size):
-            if numArray[j] < numArray[min_index]:
-                min_index = j
-              
-         # swapping the elements to sort the array
-        (numArray[i], numArray[min_index]) = (numArray[min_index],numArray[i])
-        (misplacedArray[i], misplacedArray[min_index]) = (misplacedArray[min_index],misplacedArray[i])
-      
-        # print(" swapped " + accArray[i][0] + " and " + accArray[min_index][0])
-        if misplacedArray[i][0] != misplacedArray[min_index][0]:
-          f.write("Swap " + misplacedArray[i][0] + " and " + misplacedArray[min_index][0] +"\n")
-          cost += 5
-    retList = [cost, misplacedArray]
-    return retList
-
-#run 1.
-tempList = perfectSelectionSort(numArray, pairArray, len(numArray), cost)
-cost = tempList[0]
-pairArray = tempList[1]
-
-#run 2,
-tempList = part1wcost(kingdoms, homes, pairArray, cost)
-cost = tempList[0]
-pairArray= tempList[1]
-
-#run 3
-tempList = selectionSort(numArray, pairArray, len(numArray), cost)
-cost = tempList[0]
-pairArray = tempList[1]
-
-f.write(str(cost))
-f.close()
